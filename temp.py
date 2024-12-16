@@ -1,7 +1,9 @@
+import os
+os.system('pip install yfinance')
+import yfinance as yf
 import streamlit as st
 import numpy as np
 import pandas as pd
-import yfinance as yf
 from scipy.optimize import minimize
 import matplotlib
 matplotlib.use("Agg")  # Use the Agg backend
