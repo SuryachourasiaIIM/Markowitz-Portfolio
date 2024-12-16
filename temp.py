@@ -1,10 +1,12 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
 import yfinance as yf
 from scipy.optimize import minimize
+import matplotlib
+matplotlib.use("Agg")  # Use the Agg backend
+import matplotlib.pyplot as plt
 
 # Function to fetch adjusted close prices
 def get_data(tickers, start_date, end_date):
@@ -73,7 +75,6 @@ def generate_efficient_frontier(mean_returns, cov_matrix, risk_free_rate, num_po
 
     return target_returns, target_volatilities
 
-
 # Streamlit UI
 st.title("Markowitz Portfolio Optimization")
 
@@ -81,7 +82,6 @@ st.title("Markowitz Portfolio Optimization")
 st.sidebar.markdown("""
                     <p style='text-align: center; font-size: small; color: grey;'>Created by - Surya Chourasia</p>
                     <hr style='border-top: 1px solid #ccc; margin: 20px 0;'>
-                     
                      """,
                      unsafe_allow_html=True)
 st.sidebar.header("Portfolio Inputs")
@@ -150,21 +150,11 @@ if st.sidebar.button("Run Optimization"):
     ax.plot(target_volatilities, target_returns, linestyle='--', label='Efficient Frontier')
 
     # Random portfolios with Sharpe colorbar
-    num_portfolios = 10000
-    results = np.zeros((3, num_portfolios))
-    for i in range(num_portfolios):
-        weights = np.random.random(len(tickers))
-        weights /= np.sum(weights)
-        p_return, p_volatility = portfolio_performance(weights, mean_returns, cov_matrix)
-        sharpe = (p_return - risk_free_rate) / p_volatility
-        results[:, i] = p_return, p_volatility, sharpe
-    sc = ax.scatter(results[1, :], results[0, :], c=results[2, :], cmap='viridis', marker='o', alpha=0.5)
-
-    # Highlight optimized and minimum variance portfolios
+    sc = ax.scatter(random_portfolios['Volatility'], random_portfolios['Returns'], 
+                     c=random_portfolios['Sharpe'], cmap='viridis', alpha=0.5)
     ax.scatter(opt_volatility, opt_return, c='red', marker='*', s=200, label='Optimized Portfolio')
     ax.scatter(min_var_volatility, min_var_return, c='blue', marker='o', s=100, label='Minimum Variance Portfolio')
 
-    # Add color bar
     cbar = plt.colorbar(sc, ax=ax)
     cbar.set_label('Sharpe Ratio')
 
