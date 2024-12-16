@@ -164,11 +164,14 @@ if st.sidebar.button("Run Optimization"):
     st.pyplot(fig)
 
     # Chart 2: Correlation Matrix
-    st.subheader("Correlation Matrix")
-    correlation_matrix = returns.corr()
     fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', ax=ax)
-    st.pyplot(fig)
+    cax = ax.matshow(correlation_matrix, cmap='coolwarm')
+    fig.colorbar(cax)
+    ax.set_xticks(range(len(correlation_matrix.columns)))
+    ax.set_yticks(range(len(correlation_matrix.index)))
+    ax.set_xticklabels(correlation_matrix.columns, rotation=90)
+    ax.set_yticklabels(correlation_matrix.index)
+
 
     # Chart 3: Historical Returns
     st.subheader("Historical Returns")
