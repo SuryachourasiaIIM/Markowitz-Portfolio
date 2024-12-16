@@ -1,8 +1,7 @@
+numpy
 pandas
+scipy
 matplotlib
 seaborn
-matplotlib.pyplot
-numpy
-streamlit
 yfinance
-scipy.optimize
+streamlit
